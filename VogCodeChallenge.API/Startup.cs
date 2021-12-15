@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VogCodeChallenge.API.businesslogics;
+using VogCodeChallenge.API.interfaces;
 
 namespace VogCodeChallenge.API
 {
@@ -16,6 +18,10 @@ namespace VogCodeChallenge.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvcCore(options => options.EnableEndpointRouting = false);
+            services.AddSingleton<IEmployeeInfo, EmployeeInfoFromLocal>();
+            // Replace above code with below code to mke it database friendly
+            //services.AddSingleton<IEmployeeInfo, EmployeeInfoFromDatabase>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,8 +32,9 @@ namespace VogCodeChallenge.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
+            app.UseRouting();            
+            app.UseMvcWithDefaultRoute();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
